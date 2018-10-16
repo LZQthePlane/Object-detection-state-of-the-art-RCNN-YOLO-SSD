@@ -14,7 +14,9 @@ Furthermore, even with the “faster” implementation R-CNNs (where the “R”
 
 If we are looking for pure speed then we tend to use **YOLO** as this algorithm is much faster, capable of processing 40-90 FPS on a Titan X GPU. The super fast variant of YOLO can even get up to **155 FPS.** The problem with YOLO is that it leaves much accuracy to be desired.
 
-**SSDs**, originally developed by Google, is a **balance between the two**. The algorithm is more straightforward than Faster R-CNNs.
+**SSDs**, originally developed by Google, is a **balance between the two**. The algorithm is more straightforward than Faster R-CNNs. Here we used is SSD based on MobileNet, which simplifies the computation and run much faster to satisfy real-time need but lower the accuracy pretty much meanwhile.
+
+**BUT, the updated version —— YOLOv3 has achieved very comparable accuracy than SSD while running much faster.**
 
 ------
 ## Results and Comparision
