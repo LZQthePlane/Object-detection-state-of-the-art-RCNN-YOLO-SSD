@@ -19,6 +19,6 @@ If we are looking for pure speed then we tend to use **YOLO** as this algorithm 
 ## Results and Comparision
 
 <figure class="birds">
-   <img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/MobileNet-SSD/test_out/bird_out.jpg">
-   <img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/YOLOv3/test_out/bird_out.jpg">
+   <img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/MobileNet-SSD/test_out/bird_out.jpg" width="300">
+   <img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/YOLOv3/test_out/bird_out.jpg"  width="300">
 </figure>
