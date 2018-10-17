@@ -20,7 +20,7 @@ If we are looking for pure speed then we tend to use **YOLO** as this algorithm 
 
 ------
 ## Results and Comparision
-**MoboileNet-SSD in left, YOLOv3 in right**
+***MoboileNet-SSD in left, YOLOv3 in right***
 <div style="float:left;border:solid 5px 000;margin:2px;"><img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/MobileNet-SSD/test_out/bird_out.jpg" width="420"/><img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/YOLOv3/test_out/bird_out.jpg"  width="420"/></div>
 <div style="float:left;border:solid 5px 000;margin:2px;"><img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/MobileNet-SSD/test_out/dinner_out.jpg" width="420"/><img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/YOLOv3/test_out/dinner_out.jpg"  width="420"/></div>
 <div style="float:left;border:solid 5px 000;margin:2px;"><img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/MobileNet-SSD/test_out/group_out.jpg" width="420"/><img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/YOLOv3/test_out/group_out.jpg"  width="420"/></div>
