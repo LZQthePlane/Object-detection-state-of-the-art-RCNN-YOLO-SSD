@@ -1,4 +1,4 @@
-# Download the model files First
+### Download the model files First
 Using the script file getModels.sh from command line.   
  - `sudo chmod a+x getModels.sh`
  - `./getModels.sh`   
