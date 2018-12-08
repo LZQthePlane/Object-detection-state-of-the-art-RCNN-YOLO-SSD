@@ -18,7 +18,7 @@ parser.add_argument('--video', help='Path to video file.')
 args = parser.parse_args()
 
 
-def choose_run_mode(out_path):
+def choose_run_mode():
     if args.image:
         # Open the image file
         if not os.path.isfile(args.image):
@@ -52,10 +52,10 @@ def get_coco_classes():
 
 def load_pretrain_model():
     # Give the configuration and weight files for the model and load the network using them.
-    modelConfig = file_path + 'Model' + os.sep + 'yolov3.cfg'
-    modelWeights = file_path + 'Model' + os.sep + 'yolov3.weights'
+    model_config = file_path + 'Model' + os.sep + 'yolov3.cfg'
+    model_weights = file_path + 'Model' + os.sep + 'yolov3.weights'
 
-    net = cv.dnn.readNetFromDarknet(modelConfig, modelWeights)
+    net = cv.dnn.readNetFromDarknet(model_config, model_weights)
     print('YOLOv3 darknet model loaded successfully')
     # cv.dnn.DNN_TARGET_OPENCL to run it on a GPU
     # current OpenCV version is tested only with Intel’s GPUs, it would automatically switch to CPU
@@ -66,29 +66,28 @@ def load_pretrain_model():
 
 def get_output_layers(net):
     # Get the names of all the layers in the network
-    layersNames = net.getLayerNames()
+    layers_names = net.getLayerNames()
     # Get the names of the output layers,
     # yolov3中有类似于ssd的多尺度输出，这里有3个yolo层作输出，分别是200， 227， 254
-    return [layersNames[i[0] - 1] for i in net.getUnconnectedOutLayers()]
+    return [layers_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
 
-def remove_Non_max_boxes(detections):
-
+def remove_non_max_boxes(detections):
     # 遍历所有的bounding box，将置信度高于confidence threshold的保存
     # 此时每一个object可能有多个bounding box
-    classIds, confidences, boxes = [], [], []
+    class_ids, confidences, boxes = [], [], []
     for detection in detections:
         for tep in detection:
             # tep的前四项为bounding box的中心坐标，长与宽；第5项为存在object的置信度
             # 后面项为每一种object的置信度
             scores = tep[5:]
-            classId = np.argmax(scores)
-            confidence = scores[classId]
+            class_id = np.argmax(scores)
+            confidence = scores[class_id]
             if confidence > confThreshold:
                 center_x, center_y = int(tep[0]*origin_w), int(tep[1]*origin_h)
                 box_width, box_height = int(tep[2]*origin_w), int(tep[3]*origin_h)
                 box_left, box_top = int(center_x - box_width/2), int(center_y - box_height/2)
-                classIds.append(classId)
+                class_ids.append(class_id)
                 confidences.append(float(confidence))  # 注意将numpy.float转换为float
                 boxes.append([box_left, box_top, box_width, box_height])
     # 将上一步得到的结果进行non_max_suppression，保留每个object的最大置信度bounding box
@@ -99,16 +98,16 @@ def remove_Non_max_boxes(detections):
         x_start, y_start = box[0], box[1]
         x_end, y_end = x_start+box[2], y_start+box[3]
         # 画bounding box以及label
-        draw_box_label(classIds[i], confidences[i], x_start, y_start, x_end, y_end)
+        draw_box_label(class_ids[i], confidences[i], x_start, y_start, x_end, y_end)
 
 
-def draw_box_label(classId, confidence, x_start, y_start, x_end, y_end):
+def draw_box_label(class_id, confidence, x_start, y_start, x_end, y_end):
     cv.rectangle(frame, (x_start, y_start), (x_end, y_end), (255, 178, 50), 2)
-    label = '{0}: {1:.2f}%'.format(classes[classId], confidence*100)
-    labelSize, baseLine = cv.getTextSize(label, cv.FONT_HERSHEY_SIMPLEX, 0.5, 1)
-    top = max(y_start, labelSize[1])
-    cv.rectangle(frame, (x_start, top - round(1.2 * labelSize[1])),
-                 (x_start + round(1.5 * labelSize[0]), top + baseLine),
+    label = '{0}: {1:.2f}%'.format(classes[class_id], confidence * 100)
+    label_size, base_line = cv.getTextSize(label, cv.FONT_HERSHEY_SIMPLEX, 0.5, 1)
+    top = max(y_start, label_size[1])
+    cv.rectangle(frame, (x_start, top - round(1.2 * label_size[1])),
+                 (x_start + round(1.5 * label_size[0]), top + base_line),
                  (255, 255, 255), cv.FILLED)
     cv.putText(frame, label, (x_start, top), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
 
@@ -129,7 +128,7 @@ def show_status(frame):
 
 if __name__ == '__main__':
     # choosing image/video/webcam 并保存输出文件
-    cap = choose_run_mode(outputFile)
+    cap = choose_run_mode()
     # 获取coco分类
     classes = get_coco_classes()
     # load YOLOv3 darknet model
@@ -154,7 +153,7 @@ if __name__ == '__main__':
         # 前向传播计算输出，YOLOv3有三个输出层
         detections = net.forward(get_output_layers(net))
         # 进行非最大抑制non_max_suppression，每一个object保留一个box
-        remove_Non_max_boxes(detections)
+        remove_non_max_boxes(detections)
         # 计算并显示Inference time及实时FPS
         show_status(frame)
 
