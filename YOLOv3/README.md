@@ -11,4 +11,4 @@ This will download:
 
 ### Note
 In this project, we use the *Darknet model* and load it by *opencv DNN module*. However, this function **do not support GPU** to speed up.   
-So if you have a GPU and want to take the advantage of it, try **keras model** which can inter with *tensorflow* or *Theano* backend. You can get the *.h* model by converting it, [here](https://github.com/qqwweee/keras-yolo3) is a good repo.
+So if you have a GPU and want to take the advantage of it, try **keras model** which can inter with *tensorflow* or *Theano* backend. You can get the *.h* model by converting the *.cfg & .weights* files, you can fork [here](https://github.com/qqwweee/keras-yolo3).
