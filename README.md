@@ -1,5 +1,5 @@
 # Object-detection-state-of-the-art
-Application of object detection methods state-of-the-art, including YOLOv3, SSD up to now.    
+Application of object detection methods state-of-the-art, including YOLOv3, SSD, Mask-RCNN up to now.    
 (The code comments are partly descibed in chinese)
 
 ------
