@@ -3,3 +3,11 @@ YOLOv3/Model/coco.names
 YOLOv3/Model/yolov3.cfg
 YOLOv3/Model/yolov3.weights
 *.mp4
+.idea
+Mask-RCNN/test/dinner.jpg
+Mask-RCNN/test/dogs.jpg
+Mask-RCNN/test/family.jpg
+Mask-RCNN/test/mygirl_1.jpg
+Mask-RCNN/test/mygirl_2.jpg
+Mask-RCNN/test/worktable.jpg
+Mask-RCNN/model/frozen_inference_graph.pb

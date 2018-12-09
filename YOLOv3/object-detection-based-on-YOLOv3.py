@@ -158,7 +158,7 @@ if __name__ == '__main__':
         show_status(frame)
 
         # Write the frame with the detection boxes
-        if (args.image):
+        if args.image:
             cv.imwrite(outputFile, frame)
         else:
 
