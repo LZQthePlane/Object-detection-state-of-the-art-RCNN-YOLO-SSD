@@ -10,7 +10,7 @@ You Only Look Once (YOLO)
 Single Shot Detectors (SSDs)*
 
 - **Faster R-CNNs** are likely the most “heard of” method for object detection using deep learning; however, the technique can be difficult to understand (especially for beginners in deep learning), hard to implement, and challenging to train.
-Furthermore, even with the “faster” implementation R-CNNs (where the “R” stands for “Region Proposal”) the algorithm can be **quite slow, on the order of 7 FPS. **  
+Furthermore, even with the “faster” implementation R-CNNs (where the *R* stands for *Region Proposal*), the algorithm can be **quite slow, on the order of 7 FPS** even when deploying top-level GPU.  
 **Mask-RCNN** is a new member of RCNN series, which can not only detect objects but also segment its shape, and it was trained on specific *MSCOCO* dataset.
 
  - If we are looking for pure speed then we tend to use **YOLO** as this algorithm is much faster, capable of processing 40-90 FPS on a Titan X GPU. The super fast variant of YOLO can even get up to **155 FPS.** The problem with YOLO is that it leaves much accuracy to be desired.
