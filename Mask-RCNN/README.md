@@ -1,25 +1,16 @@
-**Python**
+### Download the model files first
+You can download the package by clicking [here](http://download.tensorflow.org/models/object_detection/mask_rcnn_inception_v2_coco_2018_01_28.tar.gz), then extract the needed `frozen_inference_graph.pb` file and put it in `model` directory.
 
-`wget http://download.tensorflow.org/models/object_detection/mask_rcnn_inception_v2_coco_2018_01_28.tar.gz`
-`tar zxvf mask_rcnn_inception_v2_coco_2018_01_28.tar.gz`
+### Usage Examples :
+Put the test file (iamge or video) under the same directory   
+   
+`python3 object-det-seg-based-on-Mask-RCNN.py --image=test.jpg`   
+`python3 object-det-seg-based-on-Mask-RCNN.py --video=test.mp4`   
+if no argument provided, it starts the webcam.
 
-Download and extract the needed model files.
-
-**Usage Examples :**
-
-**Python**
-
-`python3 mask_rcnn.py --image=cars.jpg`
-`python3 mask_rcnn.py --video=cars.mp4`
-
-It starts the webcam - if no argument provided.
-
-**C++**
-
-Compile using:
-
-```g++ -ggdb `pkg-config --cflags --libs /Users/snayak/opencv/build/unix-install/opencv.pc` mask_rcnn.cpp -o mask_rcnn.out```
-
-Run using:
-`./mask_rcnn.out --image=cars.jpg`
-`./mask_rcnn.out --video=cars.mp4`
+### Note
+In the `model` directory:
+ - **mscoco_labels.names** contains all the objects for which the model was trained.   
+ - **colors.txt** file containing all the colors used to mask objects of various classes.   
+ - **frozen_inference_graph.pb** : The pre-trained weights.
+ - **mask_rcnn_inception_v2_coco_2018_01_28.pbtxt** : The text graph file that has been tuned by the OpenCV’s DNN support group, so that the network can be loaded using OpenCV. (But DNN support only Intel GPU).
