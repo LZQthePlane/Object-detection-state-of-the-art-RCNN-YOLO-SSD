@@ -31,3 +31,8 @@ Furthermore, even with the “faster” implementation R-CNNs (where the “R”
    
 ### ***Mask-RCNN below***
 <div style="float:left;border:solid 5px 000;margin:2px;"><img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/Mask-RCNN/test_out/dinner_out.jpg" width="420" height="300"/><img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/Mask-RCNN/test_out/home_out.jpg"  width="420" height="300"/></div>
+<div style="float:left;border:solid 5px 000;margin:2px;"><img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/Mask-RCNN/test_out/worktable_out.jpg" width="420" height="300"/><img src="https://github.com/LZQthePlane/Object-detection-state-of-the-art/blob/master/Mask-RCNN/test_out/dogs_out.jpg"  width="420" height="300"/></div>   
+
+------
+## Note
+In each seperated directory, you can see more details in its README.md.
