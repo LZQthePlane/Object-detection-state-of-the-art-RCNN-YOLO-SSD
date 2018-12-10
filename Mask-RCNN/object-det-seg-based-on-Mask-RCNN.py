@@ -16,75 +16,31 @@ classes = []  # mask-coco数据集包括的种类
 colors = []  # 用于分类的颜色集合
 
 
-def draw_box_mask(frame, class_id, conf, left, top, right, bottom, pre_mask):
+def choose_run_mode():
     """
-    Draw the predicted bounding box and mask on the image
+    choose image or video or webcam as input
     """
-    # Draw bounding box.
-    cv.rectangle(frame, (left, top), (right, bottom), (255, 178, 50), 3)
-    # Print a label of class.
-    class_label = '%.2f' % conf
-    if classes:
-        assert(class_id < len(classes))
-        class_label = '%s:%s' % (classes[class_id], class_label)
-    # Display the label at the top of the bounding box
-    label_size, base_line = cv.getTextSize(class_label, cv.FONT_HERSHEY_SIMPLEX, 0.5, 1)
-    top = max(top, label_size[1])
-    cv.rectangle(frame, (left, top - round(1.5*label_size[1])), (left + round(1.5*label_size[0]), top + base_line),
-                 (255, 255, 255), cv.FILLED)
-    cv.putText(frame, class_label, (left, top), cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 0), 2)
+    global out_file_path
+    if args.image:
+        # Open the image file
+        if not os.path.isfile(args.image):
+            print("Input image file ", args.image, " doesn't exist")
+            sys.exit(1)
+        cap = cv.VideoCapture(args.image)
 
-    # Draw the contours of detections
-    # 将mask从原始输出的15*15尺度 根据bounding box的大小进行还原
-    mask = cv.resize(pre_mask, (right - left + 1, bottom - top + 1))
-    # 其中 大于threshold值的区域置为1，其余置为0
-    mask_bool = (mask > maskThreshold)
-    # 取出mask包围为区域，认为是region of interest，roi存储的是mask的原始像素值
-    roi = frame[top: bottom+1, left: right+1][mask_bool]
-
-    color = colors[class_id % len(colors)]
-    # mask内部的区域 用浅色填充
-    frame[top:bottom+1, left:right+1][mask_bool] = ([0.3 * color[0], 0.3 * color[1], 0.3 * color[2]] + 0.7 * roi).astype(np.uint8)
-    # 根据mask范围 画contour包络线
-    mask = mask_bool.astype(np.uint8)
-    im2, contours, hierarchy = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-    cv.drawContours(frame[top: bottom+1, left: right+1], contours, -1, color, 3, cv.LINE_8, hierarchy, 2)
-
-
-def visualize(boxes, masks):
-    """
-    For each frame, extract the bounding box and pre_mask for each detected object
-    the format of pre_mask is NxCxHxW where
-    N - number of detected boxes,
-    C - number of classes (excluding background)
-    H x W is the segmentation shape (输出的原始图是15*15的map)
-    """
-    num_detections = boxes.shape[2]
-
-    for i in range(num_detections):
-        # 获取第i个detection的bbox和mask
-        box = boxes[0, 0, i]
-        pre_mask = masks[i]
-        score = box[2]
-
-        if score > confThreshold:
-            class_id = int(box[1])
-            # 还原bounding box坐标
-            left = int(origin_w * box[3])
-            top = int(origin_h * box[4])
-            right = int(origin_w * box[5])
-            bottom = int(origin_h * box[6])
-
-            left = max(0, min(left, origin_w-1))
-            top = max(0, min(top, origin_h-1))
-            right = max(0, min(right, origin_w-1))
-            bottom = max(0, min(bottom, origin_h-1))
-
-            # 根据detection的object id提取对应的mask输出
-            pre_mask = pre_mask[class_id]
-
-            # Draw bounding box, colorize and show the pre_mask on the image
-            draw_box_mask(frame, class_id, score, left, top, right, bottom, pre_mask)
+        out_file_path = str(out_file_path / (args.image[:-4] + '_out.jpg'))
+    elif args.video:
+        # Open the video file
+        if not os.path.isfile(args.video):
+            print("Input video file ", args.video, " doesn't exist")
+            sys.exit(1)
+        cap = cv.VideoCapture(args.video)
+        out_file_path = str(out_file_path / (args.video[:-4] + '_out.mp4'))
+    else:
+        # Webcam input
+        cap = cv.VideoCapture(0)
+        out_file_path = str(out_file_path / 'webcam_out.mp4')
+    return cap
 
 
 def load_coco_classes():
@@ -124,33 +80,6 @@ def load_pretrain_model():
     return net
 
 
-def choose_run_mode():
-    """
-    choose image or video or webcam as input
-    """
-    global out_file_path
-    if args.image:
-        # Open the image file
-        if not os.path.isfile(args.image):
-            print("Input image file ", args.image, " doesn't exist")
-            sys.exit(1)
-        cap = cv.VideoCapture(args.image)
-
-        out_file_path = str(out_file_path / (args.image[:-4] + '_out.jpg'))
-    elif args.video:
-        # Open the video file
-        if not os.path.isfile(args.video):
-            print("Input video file ", args.video, " doesn't exist")
-            sys.exit(1)
-        cap = cv.VideoCapture(args.video)
-        out_file_path = str(out_file_path / (args.video[:-4] + '_out.mp4'))
-    else:
-        # Webcam input
-        cap = cv.VideoCapture(0)
-        out_file_path = str(out_file_path / 'webcam_out.mp4')
-    return cap
-
-
 def set_video_writer(cap, write_fps=25):
     """
     Get the video writer initialized to save the output video
@@ -159,6 +88,77 @@ def set_video_writer(cap, write_fps=25):
                                 (round(cap.get(cv.CAP_PROP_FRAME_WIDTH)),
                                  round(cap.get(cv.CAP_PROP_FRAME_HEIGHT))))
     return vid_writer
+
+
+def visualize(boxes, masks):
+    """
+    For each frame, extract the bounding box and pre_mask for each detected object
+    the format of pre_mask is NxCxHxW where
+    N - number of detected boxes,
+    C - number of classes (excluding background)
+    H x W is the segmentation shape (输出的原始图是15*15的map)
+    """
+    num_detections = boxes.shape[2]
+
+    for i in range(num_detections):
+        # 获取第i个detection的bbox和mask
+        box = boxes[0, 0, i]
+        pre_mask = masks[i]
+        score = box[2]
+
+        if score > confThreshold:
+            class_id = int(box[1])
+            # 还原bounding box坐标
+            left = int(origin_w * box[3])
+            top = int(origin_h * box[4])
+            right = int(origin_w * box[5])
+            bottom = int(origin_h * box[6])
+
+            left = max(0, min(left, origin_w-1))
+            top = max(0, min(top, origin_h-1))
+            right = max(0, min(right, origin_w-1))
+            bottom = max(0, min(bottom, origin_h-1))
+
+            # 根据detection的object id提取对应的mask输出
+            pre_mask = pre_mask[class_id]
+
+            # Draw bounding box, colorize and show the pre_mask on the image
+            draw_box_mask(frame, class_id, score, left, top, right, bottom, pre_mask)
+
+
+def draw_box_mask(frame, class_id, conf, left, top, right, bottom, pre_mask):
+    """
+    Draw the predicted bounding box and mask on the image
+    """
+    # Draw bounding box.
+    cv.rectangle(frame, (left, top), (right, bottom), (255, 178, 50), 3)
+    # Print a label of class.
+    class_label = '%.2f' % conf
+    if classes:
+        assert(class_id < len(classes))
+        class_label = '%s:%s' % (classes[class_id], class_label)
+    # Display the label at the top of the bounding box
+    label_size, base_line = cv.getTextSize(class_label, cv.FONT_HERSHEY_SIMPLEX, 0.5, 1)
+    top = max(top, label_size[1])
+    cv.rectangle(frame, (left, top - round(1.5*label_size[1])), (left + round(1.5*label_size[0]), top + base_line),
+                 (255, 255, 255), cv.FILLED)
+    cv.putText(frame, class_label, (left, top), cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 0), 2)
+
+    # Draw the contours of detections
+    # 将mask从原始输出的15*15尺度 根据bounding box的大小进行还原
+    mask = cv.resize(pre_mask, (right - left + 1, bottom - top + 1))
+    # 其中 大于threshold值的区域置为1，其余置为0
+    mask_bool = (mask > maskThreshold)
+    # 取出mask包围为区域，认为是region of interest，roi存储的是mask的原始像素值
+    roi = frame[top: bottom+1, left: right+1][mask_bool]
+
+    color = colors[class_id % len(colors)]
+    # mask内部的区域 用浅色填充
+    frame[top:bottom+1, left:right+1][mask_bool] = ([0.3 * color[0], 0.3 * color[1], 0.3 * color[2]] + 0.7 * roi).astype(np.uint8)
+    # 根据mask范围 画contour包络线
+    mask = mask_bool.astype(np.uint8)
+    im2, contours, hierarchy = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    cv.drawContours(frame[top: bottom+1, left: right+1], contours, -1, color, 3, cv.LINE_8, hierarchy, 2)
 
 
 def show_status(frame):
