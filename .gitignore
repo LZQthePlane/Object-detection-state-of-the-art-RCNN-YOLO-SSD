@@ -11,3 +11,5 @@ Mask-RCNN/test/mygirl_1.jpg
 Mask-RCNN/test/mygirl_2.jpg
 Mask-RCNN/test/worktable.jpg
 Mask-RCNN/model/frozen_inference_graph.pb
+*.pyc
+*.pb
