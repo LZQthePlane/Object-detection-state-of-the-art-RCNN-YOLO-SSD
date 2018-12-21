@@ -8,7 +8,7 @@ from imutils.video import FPS
 from pathlib import Path
 from utils import label_map_util
 from utils import visualization_utils as vis_util
-from utils import ops as utils_ops
+from utils import tf_ops_assist as utils_ops
 
 
 file_path = Path.cwd()
@@ -98,8 +98,7 @@ def run_inference_for_single_image(image, sess):
     ops = tf.get_default_graph().get_operations()
     all_tensor_names = {output.name for op in ops for output in op.outputs}
     tensor_dict = {}
-    for key in ['num_detections', 'detection_boxes', 'detection_scores',
-                'detection_classes', 'detection_masks']:
+    for key in ['num_detections', 'detection_boxes', 'detection_scores', 'detection_classes', 'detection_masks']:
         tensor_name = key + ':0'
         if tensor_name in all_tensor_names:
             tensor_dict[key] = tf.get_default_graph().get_tensor_by_name(tensor_name)
