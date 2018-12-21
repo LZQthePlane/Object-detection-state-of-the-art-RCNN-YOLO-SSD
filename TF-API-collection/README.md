@@ -6,7 +6,8 @@ Inside the un-tar'ed directory, you will find:
 * a checkpoint
   (`model.ckpt.data-00000-of-00001`, `model.ckpt.index`, `model.ckpt.meta`)
 * a frozen graph proto with weights baked into the graph as constants
-  (`frozen_inference_graph.pb`) to be used for out of the box inference. **Therefore, put this file under the `models` directory.**
+  (`frozen_inference_graph.pb`) to be used for out of the box inference.    
+  **Therefore, put this file under the `models` directory.**
 
 ### Usage Examples :
 Put the test file (iamge or video) under the same directory   
