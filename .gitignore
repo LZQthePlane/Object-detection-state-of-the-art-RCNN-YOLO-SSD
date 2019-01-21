@@ -13,3 +13,4 @@ Mask-RCNN/test/worktable.jpg
 Mask-RCNN/model/frozen_inference_graph.pb
 *.pyc
 *.pb
+*.ckpt
