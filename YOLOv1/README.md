@@ -10,3 +10,7 @@ Put the test file (image only) to `test_images` file.
 
 ### Note
 Two scripts here provided are nearly same, for `yolo_tf.py` uses some **tf constructor API** methods for functions like *Non-max Minimum*, etc. 
+
+
+### Reference
+[知乎专栏](https://zhuanlan.zhihu.com/p/32525231)
