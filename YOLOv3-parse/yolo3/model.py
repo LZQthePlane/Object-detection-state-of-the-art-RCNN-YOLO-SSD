@@ -62,11 +62,11 @@ def resblock_body(x, num_filters, num_blocks):
 def darknet_body(x):
     """全卷积网络，采用了darknet53层中的前52层，除去最后一层的平均池化层"""
     x = DarknetConv2D_BN_Leaky(32, (3, 3))(x)  # 416*416*3
-    x = resblock_body(x, 64, 1)
-    x = resblock_body(x, 128, 2)
-    x = resblock_body(x, 256, 8)
-    x = resblock_body(x, 512, 8)
-    x = resblock_body(x, 1024, 4)
+    x = resblock_body(x, 64, 1)  # 1+1*2=3
+    x = resblock_body(x, 128, 2)  # 1+2*2=5
+    x = resblock_body(x, 256, 8)  # 1+8*2=17
+    x = resblock_body(x, 512, 8)  # 1+8*2=17
+    x = resblock_body(x, 1024, 4)  # 1+4*2=9
     return x
 
 
