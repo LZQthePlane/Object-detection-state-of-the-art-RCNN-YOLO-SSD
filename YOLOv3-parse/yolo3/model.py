@@ -71,7 +71,7 @@ def darknet_body(x):
 
 
 def make_last_layers(x, num_filters, out_filters):
-    """6 Conv2D_BN_Leaky layers followed by a Conv2D_linear layer"""
+    """用于构造3个尺度的输出"""
     # 第1步，x执行多组1x1的卷积操作和3x3的卷积操作，filter先扩大再恢复，
     # 最后与输入的filter保持不变，仍为512，则x由(?, 13, 13, 1024)转变为(?, 13, 13, 512)
     x = compose(DarknetConv2D_BN_Leaky(num_filters, (1, 1)),
