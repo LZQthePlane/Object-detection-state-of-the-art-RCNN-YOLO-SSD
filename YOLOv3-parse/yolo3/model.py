@@ -151,7 +151,7 @@ def tiny_yolo_body(inputs, num_anchors, num_classes):
 
 
 # 此函数，当calc_loss为True时，用于训练过程，当calc_loss为False时，用于推理过程
-def olo_head(feats, anchors, num_classes, input_shape, calc_loss=False):
+def yolo_head(feats, anchors, num_classes, input_shape, calc_loss=False):
     """
     将预测图yolo_outputs[l]，拆分为边界框的起始点xy、宽高wh、置信度confidence和类别概率class_probs
 
