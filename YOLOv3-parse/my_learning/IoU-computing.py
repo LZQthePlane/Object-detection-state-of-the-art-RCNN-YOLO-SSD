@@ -13,8 +13,8 @@ def bb_iou(box_a, box_b):
     inter_x2 = min(a_x2, b_x2)
     inter_y2 = min(a_y2, b_y2)
     """
-    要点2：之所以要+1，是因为像素点是一个个cell而不是point
-    假设有一个box为（0，0，2，2），其实际上是一个3*3的area
+    要点2：之所以要+1，是因为像素点是一个个cell而不是point，假设有一个box为（0，0，2，2），其实际上是一个3*3的area
+    要点3：之所以要用max()函数，是防止二者没有交集时，输出为0而不是负值。
     """
     inter_area = max(0, inter_x2 - inter_x1 + 1) * max(0, inter_y2 - inter_y1 + 1)
 
