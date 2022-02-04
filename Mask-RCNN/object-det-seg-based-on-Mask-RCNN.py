@@ -157,7 +157,7 @@ def draw_box_mask(frame, class_id, conf, left, top, right, bottom, pre_mask):
     frame[top:bottom+1, left:right+1][mask_bool] = ([0.3 * color[0], 0.3 * color[1], 0.3 * color[2]] + 0.7 * roi).astype(np.uint8)
     # 根据mask范围 画contour包络线
     mask = mask_bool.astype(np.uint8)
-    im2, contours, hierarchy = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     cv.drawContours(frame[top: bottom+1, left: right+1], contours, -1, color, 3, cv.LINE_8, hierarchy, 2)
 
 
